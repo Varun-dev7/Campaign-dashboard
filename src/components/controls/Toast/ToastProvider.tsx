@@ -37,7 +37,7 @@ export default function ToastProvider({ children }: ToastProviderProps) {
         <ToastContext.Provider value={{ open, close }}>
             {children}
 
-            <div className="fixed space-y-2 bottom-4 right-4 z-[100]">
+            <div className="fixed space-y-2 bottom-4 right-4 z-100">
                 {toasts.map(({ id, component, icon, type }) => (
                     <Toaster key={id} close={close} id={id} icon={icon} type={type as "danger" | "success" | "info"}>
                         {component}

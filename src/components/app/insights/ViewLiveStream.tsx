@@ -38,7 +38,7 @@ export default function ViewLiveStream() {
                 toast.open(mdata?.message, <MdErrorOutline />, "danger")
             }
             setCampaignLoading(false)
-        }).catch(errors => {
+        }).catch(() => {
             setCampaignData(null)
             setCampaignLoading(false)
             toast.open("Rate limit exceeded. Max 30 requests per minute.", <MdErrorOutline />, "danger", 5000)
@@ -58,7 +58,7 @@ export default function ViewLiveStream() {
             }
             console.log(mdata.message);
             setInsightsLoading(false)
-        }).catch(errors => {
+        }).catch(() => {
             setInsightsData(null)
             setInsightsLoading(false)
             toast.open("Rate limit exceeded. Max 30 requests per minute.", <MdErrorOutline />, "danger", 5000)

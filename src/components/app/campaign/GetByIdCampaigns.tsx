@@ -31,7 +31,7 @@ export default function GetByIdCampaigns() {
         toast.open(mdata?.message, <MdErrorOutline />, "danger")
       }
       setLoading(false)
-    }).catch(errors => {
+    }).catch(() => {
       setCampaignData(null)
       setLoading(false)
       toast.open("Rate limit exceeded. Max 30 requests per minute.", <MdErrorOutline />, "danger", 5000)

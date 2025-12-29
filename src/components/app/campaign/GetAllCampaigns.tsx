@@ -39,7 +39,7 @@ export default function GetAllCampaigns() {
                 toast.open(mdata?.message, <MdErrorOutline />, "danger")
             }
             setLoading(false)
-        }).catch(errors => {
+        }).catch(() => {
             setCampaignData([])
             setLoading(false)
             toast.open("Rate limit exceeded. Max 30 requests per minute.", <MdErrorOutline />, "danger", 5000)
@@ -59,7 +59,7 @@ export default function GetAllCampaigns() {
             }
             console.log(mdata.message);
             setLoading(false)
-        }).catch(errors => {
+        }).catch(() => {
             setInsightsData(null)
             setLoading(false)
             toast.open("Rate limit exceeded. Max 30 requests per minute.", <MdErrorOutline />, "danger", 5000)

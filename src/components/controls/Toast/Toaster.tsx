@@ -49,7 +49,7 @@ export default function Toaster({
       className={`flex items-center w-full max-w-xs p-4 text-gray-600 rounded-lg shadow-lg ${divColor()}`}
     >
       <div
-        className={`inline-flex items-center justify-center flex-shrink-0 w-4 h-4 ${iconColor()} ${divColor()}`}
+        className={`inline-flex items-center justify-center w-4 h-4 ${iconColor()} ${divColor()}`}
       >
         {icon ?? <GrInfo />}
       </div>
