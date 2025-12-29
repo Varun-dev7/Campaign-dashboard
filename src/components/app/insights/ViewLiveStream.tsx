@@ -68,24 +68,63 @@ export default function ViewLiveStream() {
     useEffect(() => {
         if (!id) return;
 
-        const eventSource = new EventSource(
-            `https://mixo-fe-backend-task.vercel.app/campaigns/${id}/insights/stream`
-        );
+        let eventSource: EventSource | null = null;
+        let retryTimeout: ReturnType<typeof setTimeout>;
+        let retryCount = 0;
 
-        eventSource.onmessage = (event) => {
-            const data: CampaignByIdInsights = JSON.parse(event.data);
-            setInsightsData(data);
+        const MAX_RETRIES = 10;
+        const RETRY_DELAY = 5000;
+
+        const connect = () => {
+            eventSource = new EventSource(
+                `https://mixo-fe-backend-task.vercel.app/campaigns/${id}/insights/stream`
+            );
+
+            eventSource.onmessage = (event) => {
+                const data: CampaignByIdInsights = JSON.parse(event.data);
+                setInsightsData(data);
+
+                retryCount = 0;
+            };
+
+            eventSource.onerror = () => {
+                eventSource?.close();
+
+                if (retryCount === 0) {
+                    toast.open(
+                        'Live connection lost. Reconnecting…',
+                        <MdErrorOutline />,
+                        'danger',
+                        3000
+                    );
+                }
+
+                if (retryCount >= MAX_RETRIES) {
+                    toast.open(
+                        'Live updates stopped. Please refresh.',
+                        <MdErrorOutline />,
+                        'danger',
+                        5000
+                    );
+                    return;
+                }
+
+                retryCount++;
+
+                retryTimeout = setTimeout(() => {
+                    connect();
+                }, RETRY_DELAY * retryCount);
+            };
         };
 
-        eventSource.onerror = () => {
-            toast.open('SSE connection error', <MdErrorOutline />, 'danger');
-            eventSource.close();
-        };
+        connect();
 
         return () => {
-            eventSource.close();
+            eventSource?.close();
+            clearTimeout(retryTimeout);
         };
     }, [id]);
+
 
     if (campaignLoading || insightsLoading) {
         return (
